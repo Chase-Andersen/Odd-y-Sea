@@ -10,7 +10,7 @@ class HUD:
         self.title_font = pygame.font.SysFont("arial", 24, bold=True)
         self.text_font = pygame.font.SysFont("arial", 20)
 
-    def draw(self, screen, player):
+    def draw(self, screen, player, fate):
 
         # Background panel
         pygame.draw.rect(screen, (235, 235, 235), (0, 0, 800, 70))
@@ -33,3 +33,11 @@ class HUD:
             text = self.text_font.render(label, True, BLACK)
             screen.blit(text, (x, 36))
             x += 180
+
+        fate_text = self.text_font.render(
+            f"Fate: {fate if fate is not None else '-'}",
+            True,
+            BLACK
+        )
+
+        screen.blit(fate_text, (600, 36))

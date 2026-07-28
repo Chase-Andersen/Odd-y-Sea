@@ -1,6 +1,7 @@
 import pygame
 
 from game.board import Board
+from game.fate_die import FateDie
 from game.player import Player
 from game.ui import HUD
 from game.turn_manager import TurnManager
@@ -24,6 +25,8 @@ class Game:
 
         # Game objects
         self.board = Board()
+        self.fate_die = FateDie()
+        self.last_fate = None
 
         self.players = [
             Player("Odysseus", BLUE, 0, 0),
@@ -63,6 +66,9 @@ class Game:
                 elif event.key == pygame.K_SPACE:
                     self.turn_manager.next_turn()
 
+                elif event.key == pygame.K_r:
+                    self.last_fate = self.fate_die.roll()
+
     def update(self):
         """Update the game state."""
         pass
@@ -84,7 +90,8 @@ class Game:
         # Draw the HUD
         self.hud.draw(
             self.screen,
-            self.turn_manager.active_player
+            self.turn_manager.active_player,
+            self.last_fate
         )
 
         pygame.display.flip()
