@@ -1,9 +1,14 @@
 import pygame
 from game.board import BOARD_X, BOARD_Y, CELL_SIZE
+from game.constants import WHITE
 
 
 class Player:
-    def __init__(self, row=0, col=0):
+    def __init__(self, name, color, row=0, col=0):
+
+        self.name = name
+        self.color = color
+
         self.row = row
         self.col = col
 
@@ -13,18 +18,26 @@ class Player:
         self.divine_favor = 0
         self.has_sacrifice = True
 
-    def draw(self, screen):
-        """Draw the player's ship."""
+    def draw(self, screen, active=False):
 
         center_x = BOARD_X + self.col * CELL_SIZE + CELL_SIZE // 2
         center_y = BOARD_Y + self.row * CELL_SIZE + CELL_SIZE // 2
 
         pygame.draw.circle(
             screen,
-            (40, 80, 255),
+            self.color,
             (center_x, center_y),
-            CELL_SIZE // 3,
+            CELL_SIZE // 3
         )
+
+        if active:
+            pygame.draw.circle(
+                screen,
+                WHITE,
+                (center_x, center_y),
+                CELL_SIZE // 3 + 4,
+                3
+            )
     def move(self, d_row, d_col):
         """Move the player one space if it's inside the board."""
 

@@ -2,19 +2,37 @@ import pygame
 
 from game.board import Board
 from game.player import Player
-from game.constants import OCEAN, FPS
 from game.ui import HUD
+from game.turn_manager import TurnManager
+from game.constants import (
+    BLUE,
+    RED,
+    GREEN,
+    GOLD,
+    OCEAN,
+    FPS,
+)
 
 
 class Game:
     def __init__(self, screen):
         self.screen = screen
-        self.hud = HUD()
         self.clock = pygame.time.Clock()
+
+        # UI
+        self.hud = HUD()
 
         # Game objects
         self.board = Board()
-        self.captain = Player(row=0, col=0)
+
+        self.players = [
+            Player("Odysseus", BLUE, 0, 0),
+            Player("Helena", RED, 7, 7),
+            Player("Leo", GREEN, 0, 7),
+            Player("Nikos", GOLD, 7, 0),
+        ]
+
+        self.turn_manager = TurnManager(self.players)
 
         self.running = True
 
@@ -28,17 +46,22 @@ class Game:
 
             elif event.type == pygame.KEYDOWN:
 
+                player = self.turn_manager.active_player
+
                 if event.key == pygame.K_w:
-                    self.captain.move(-1, 0)
+                    player.move(-1, 0)
 
                 elif event.key == pygame.K_s:
-                    self.captain.move(1, 0)
+                    player.move(1, 0)
 
                 elif event.key == pygame.K_a:
-                    self.captain.move(0, -1)
+                    player.move(0, -1)
 
                 elif event.key == pygame.K_d:
-                    self.captain.move(0, 1)
+                    player.move(0, 1)
+
+                elif event.key == pygame.K_SPACE:
+                    self.turn_manager.next_turn()
 
     def update(self):
         """Update the game state."""
@@ -50,9 +73,19 @@ class Game:
         self.screen.fill(OCEAN)
 
         self.board.draw(self.screen)
-        self.captain.draw(self.screen)
 
-        self.hud.draw(self.screen, self.captain)
+        # Draw every player
+        for player in self.players:
+            player.draw(
+                self.screen,
+                active=(player == self.turn_manager.active_player)
+            )
+
+        # Draw the HUD
+        self.hud.draw(
+            self.screen,
+            self.turn_manager.active_player
+        )
 
         pygame.display.flip()
 

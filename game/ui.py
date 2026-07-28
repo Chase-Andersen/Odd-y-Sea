@@ -1,6 +1,6 @@
 import pygame
 
-from game.constants import WHITE, BLACK
+from game.constants import BLACK
 
 
 class HUD:
@@ -16,6 +16,10 @@ class HUD:
         pygame.draw.rect(screen, (235, 235, 235), (0, 0, 800, 70))
         pygame.draw.line(screen, BLACK, (0, 70), (800, 70), 2)
 
+        # Player name
+        name = self.title_font.render(player.name, True, BLACK)
+        screen.blit(name, (20, 4))
+
         labels = [
             f"Crew: {player.crew}",
             f"Treasure: {player.treasure}",
@@ -27,5 +31,5 @@ class HUD:
 
         for label in labels:
             text = self.text_font.render(label, True, BLACK)
-            screen.blit(text, (x, 24))
+            screen.blit(text, (x, 36))
             x += 180
