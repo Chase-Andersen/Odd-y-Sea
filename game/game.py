@@ -3,11 +3,13 @@ import pygame
 from game.board import Board
 from game.player import Player
 from game.constants import OCEAN, FPS
+from game.ui import HUD
 
 
 class Game:
     def __init__(self, screen):
         self.screen = screen
+        self.hud = HUD()
         self.clock = pygame.time.Clock()
 
         # Game objects
@@ -49,6 +51,8 @@ class Game:
 
         self.board.draw(self.screen)
         self.captain.draw(self.screen)
+
+        self.hud.draw(self.screen, self.captain)
 
         pygame.display.flip()
 
